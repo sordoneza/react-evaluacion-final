@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
@@ -16,6 +16,8 @@ const Login = () => {
 
   const history = useHistory();
   const auth = useAuth();
+
+  if (auth.isAuthenticated) return <Redirect to="/" />;
 
   const handleChange = e => {
     const property = { [e.target.name]: e.target.value };
