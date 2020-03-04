@@ -1,86 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
-import { login } from "../../utilities/Auth";
+
+import { useAuth } from "../../utilities/Auth";
 
 const Wrapper = styled.div`
   width: 300px;
   margin: 0 auto;
 `;
 
-class Login extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    errors: []
+const Login = () => {
+  const [user, setUser] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState([]);
+
+  const history = useHistory();
+  const auth = useAuth();
+
+  const handleChange = e => {
+    const property = { [e.target.name]: e.target.value };
+    const newuser = Object.assign({}, user, property);
+
+    setUser(newuser);
   };
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const errors = this.validate();
-    const { username, password } = this.state;
+    const errors = validate();
 
     if (errors.username || errors.password) {
-      this.setState({ errors });
+      setErrors(errors);
     } else {
-      login({ username: username, password: password }, () =>
-        this.props.history.push("/")
-      );
+      auth.login(user, () => history.push("/"));
     }
   };
 
-  validate = () => {
-    const { username, password } = this.state;
+  const validate = () => {
     const errors = {};
-    if (!username) {
+    if (!user.username) {
       errors.username = "Usuario requerido";
     }
-    if (!password) {
+    if (!user.password) {
       errors.password = "Contraseña requerido";
     }
     return errors;
   };
 
-  render() {
-    const { username, password, errors } = this.state;
-    return (
-      <Wrapper>
-        <h1>Login</h1>
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="username">Usuario</Label>
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              value={username}
-              onChange={this.handleChange}
-            />
-            {errors.username && (
-              <FormText color="danger">{errors.username}</FormText>
-            )}
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Contraseña</Label>
-            <Input
-              name="password"
-              type="password"
-              value={password}
-              onChange={this.handleChange}
-            />
-            {errors.password && (
-              <FormText color="danger">{errors.password}</FormText>
-            )}
-          </FormGroup>
-          <Button color="primary">Iniciar sesión</Button>
-        </Form>
-      </Wrapper>
-    );
-  }
-}
+  return (
+    <Wrapper>
+      <h1>Login</h1>
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label htmlFor="username">Usuario</Label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            value={user.username}
+            onChange={handleChange}
+          />
+          {errors.username && (
+            <FormText color="danger">{errors.username}</FormText>
+          )}
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="password">Contraseña</Label>
+          <Input
+            name="password"
+            type="password"
+            value={user.password}
+            onChange={handleChange}
+          />
+          {errors.password && (
+            <FormText color="danger">{errors.password}</FormText>
+          )}
+        </FormGroup>
+        <Button color="primary">Iniciar sesión</Button>
+      </Form>
+    </Wrapper>
+  );
+};
 
 export default Login;
