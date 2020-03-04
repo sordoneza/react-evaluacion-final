@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { login } from "../../utilities/Auth";
 
 const Wrapper = styled.div`
   width: 300px;
@@ -21,7 +22,15 @@ class Login extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const errors = this.validate();
-    this.setState({ errors });
+    const { username, password } = this.state;
+
+    if (errors.username || errors.password) {
+      this.setState({ errors });
+    } else {
+      login({ username: username, password: password }, () =>
+        this.props.history.push("/")
+      );
+    }
   };
 
   validate = () => {
