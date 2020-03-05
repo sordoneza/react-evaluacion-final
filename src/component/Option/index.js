@@ -2,7 +2,8 @@ import React from "react";
 import { ListGroupItem } from "reactstrap";
 
 const Option = ({ id, selected, nombreOpcion, onOptionSelected }) => {
-  const onClick = () => {
+  const onClick = e => {
+    e.preventDefault();
     onOptionSelected(id);
   };
   return (

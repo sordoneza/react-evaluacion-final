@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Form, ListGroup, Button } from "reactstrap";
+import { Formik } from "formik";
 import Option from "../Option";
 import CustomAlert from "../../component/CustomAlert";
 
 export default ({ children, title }) => {
   const [options, setOptions] = useState(children);
-  const [error, setError] = useState(false);
 
   const onOptionSelected = id => {
     setOptions(prevOptions =>
@@ -16,28 +16,41 @@ export default ({ children, title }) => {
     );
   };
 
-  const validateSelectedOption = () => {
-    const optionsSelected = options.filter(opt => opt.selected);
-
-    setError(optionsSelected.length === 0);
-  };
-
   return (
-    <Form onSubmit={e => e.preventDefault()}>
-      <h4>{title}</h4>
-      <ListGroup>
-        {options.map(option => {
-          return (
-            <Option
-              key={option.id}
-              onOptionSelected={onOptionSelected}
-              {...option}
-            />
-          );
-        })}
-      </ListGroup>
-      {error && <CustomAlert text="Debe seleccionar una respuesta" />}
-      <Button onClick={validateSelectedOption}>Siguiente</Button>
-    </Form>
+    <Formik
+      initialValues={options}
+      validate={values => {
+        const errors = {};
+        const optionsSelected = values.filter(opt => opt.selected);
+
+        if (optionsSelected.length === 0) {
+          errors.empty = true;
+        }
+
+        return errors;
+      }}
+      onSubmit={values => {}}
+    >
+      {({ values, errors, handleSubmit }) => (
+        <Form onSubmit={handleSubmit}>
+          <h4>{title}</h4>
+          <ListGroup>
+            {values.map(option => {
+              return (
+                <Option
+                  key={option.id}
+                  onOptionSelected={onOptionSelected}
+                  {...option}
+                />
+              );
+            })}
+          </ListGroup>
+          {errors.empty && (
+            <CustomAlert text="Debe seleccionar una respuesta" />
+          )}
+          <Button type="submit">Siguiente</Button>
+        </Form>
+      )}
+    </Formik>
   );
 };
