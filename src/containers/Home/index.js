@@ -10,9 +10,13 @@ const maxFormId = questions[questions.length - 1].id;
 const NavForm = ({ forms }) => {
   const [currentFormIdx, setCurrentFormIdx] = useState(0);
 
+  const auth = useAuth();
+
   const onSubmitForm = () => {
     if (currentFormIdx + 1 < forms.length) {
       setCurrentFormIdx(currentFormIdx + 1);
+    } else if (currentFormIdx === forms.length - 1) {
+      auth.sendPoll();
     }
   };
 

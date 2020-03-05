@@ -8,6 +8,7 @@ const Context = createContext({});
 
 export const AuthProvider = props => {
   const [isAuthenticated, setIsAuthenticated] = useState(validateSession());
+  const [endedPoll, setEndedPoll] = useState(false);
 
   const login = async (user, callback) => {
     console.log(user);
@@ -25,8 +26,12 @@ export const AuthProvider = props => {
     }
   };
 
+  const sendPoll = () => {
+    setEndedPoll(true);
+  };
+
   return (
-    <Context.Provider value={{ isAuthenticated, login }}>
+    <Context.Provider value={{ isAuthenticated, login, endedPoll, sendPoll }}>
       {props.children}
     </Context.Provider>
   );
