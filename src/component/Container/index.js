@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import Option from "../Option";
 import CustomAlert from "../../component/CustomAlert";
 
-export default ({ children, title }) => {
+export default ({ children, title, ...props }) => {
   const [options, setOptions] = useState(children);
 
   const onOptionSelected = id => {
@@ -29,7 +29,9 @@ export default ({ children, title }) => {
 
         return errors;
       }}
-      onSubmit={values => {}}
+      onSubmit={values => {
+        props.onSubmitForm();
+      }}
     >
       {({ values, errors, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
@@ -48,7 +50,9 @@ export default ({ children, title }) => {
           {errors.empty && (
             <CustomAlert text="Debe seleccionar una respuesta" />
           )}
-          <Button type="submit">Siguiente</Button>
+          <Button type="submit">
+            {props.last ? "Finalizar" : "Siguiente"}
+          </Button>
         </Form>
       )}
     </Formik>

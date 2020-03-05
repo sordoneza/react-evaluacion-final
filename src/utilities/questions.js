@@ -1,5 +1,6 @@
 const questions = [
   {
+    id: 1,
     pregunta: "La suma de 2 mas 2 es:",
     opciones: [
       {
@@ -15,6 +16,7 @@ const questions = [
     ]
   },
   {
+    id: 2,
     pregunta: "La multiplicacion de 2 * 2 es:",
     opciones: [
       {
@@ -30,6 +32,7 @@ const questions = [
     ]
   },
   {
+    id: 3,
     pregunta: "La resta de 2 - 2 es:",
     opciones: [
       {
@@ -45,6 +48,7 @@ const questions = [
     ]
   },
   {
+    id: 4,
     pregunta: "La division de 2 / 2 es:",
     opciones: [
       {
@@ -60,6 +64,7 @@ const questions = [
     ]
   },
   {
+    id: 5,
     pregunta: "El factorial de 2! :",
     opciones: [
       {
