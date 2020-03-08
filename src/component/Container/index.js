@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Form, ListGroup, Button } from "reactstrap";
+import { Form, ListGroup, Button, FormGroup } from "reactstrap";
 import { Formik } from "formik";
 import Option from "../Option";
 import CustomAlert from "../../component/CustomAlert";
+import styled from "styled-components";
+
+const StyledDiv = styled.div`
+  margin: 10px;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 10px;
+`;
 
 export default ({ children, title, ...props }) => {
   const [options, setOptions] = useState(children);
@@ -30,29 +38,34 @@ export default ({ children, title, ...props }) => {
         return errors;
       }}
       onSubmit={values => {
-        props.onSubmitForm();
+        props.onSubmitForm(values);
       }}
     >
       {({ values, errors, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
-          <h4>{title}</h4>
-          <ListGroup>
-            {values.map(option => {
-              return (
-                <Option
-                  key={option.id}
-                  onOptionSelected={onOptionSelected}
-                  {...option}
-                />
-              );
-            })}
-          </ListGroup>
-          {errors.empty && (
-            <CustomAlert text="Debe seleccionar una respuesta" />
-          )}
-          <Button type="submit">
-            {props.last ? "Finalizar" : "Siguiente"}
-          </Button>
+          <StyledDiv>
+            <h4>{title}</h4>
+            <FormGroup>
+              <ListGroup>
+                {values.map(option => {
+                  return (
+                    <Option
+                      key={option.id}
+                      onOptionSelected={onOptionSelected}
+                      {...option}
+                    />
+                  );
+                })}
+              </ListGroup>
+            </FormGroup>
+            {errors.empty && (
+              <CustomAlert text="Debe seleccionar una respuesta" />
+            )}
+
+            <Button type="submit">
+              {props.last ? "Finalizar" : "Siguiente"}
+            </Button>
+          </StyledDiv>
         </Form>
       )}
     </Formik>
